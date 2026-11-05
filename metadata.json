@@ -1,0 +1,6 @@
+{
+  "name": "KOTEL HR AGENCY — Рекрутинг в iGaming & Affiliate",
+  "description": "Специализированное рекрутинговое агентство в нишах iGaming, Affiliate Marketing, Media Buying и Tech. Подбор топовых специалистов и сборка команд.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
