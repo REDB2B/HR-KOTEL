@@ -12,9 +12,9 @@ interface CandidateCookerProps {
 }
 
 export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmit }) => {
-  const [selectedRole, setSelectedRole] = useState('Solo Media Buyer');
-  const [verticalType, setVerticalType] = useState('Любая / Тяжелая серая вертикаль');
-  const [urgency, setUrgency] = useState('Горит: первые кандидаты за 48 часов!');
+  const [selectedRole, setSelectedRole] = useState('Solo Media Buyer (FB/Google/ASO)');
+  const [verticalType, setVerticalType] = useState('iGaming, Gambling & Betting');
+  const [urgency, setUrgency] = useState('Срочно: первые кандидаты за 3–5 дней');
   const [telegram, setTelegram] = useState('');
   const [email, setEmail] = useState('');
   const [tgError, setTgError] = useState<string | null>(null);
@@ -113,11 +113,11 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                   <span className="w-2 h-2 rounded-full bg-[#97D700]" />
                   <span>1. ИНГРЕДИЕНТ: Какая роль вам требуется?</span>
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                   {[
                     'Solo Media Buyer (FB/Google/ASO)',
-                    'Team Lead сквада байеров',
-                    'Сборка целого сквада под ключ',
+                    'Team Lead медиабаинг-команды',
+                    'Сборка готовой команды под ключ',
                     'iOS / Android Webview Dev',
                     'Affiliate / BizDev Manager',
                     'C-Level (CMO, COO, CBDO)',
@@ -128,7 +128,7 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                       onClick={() => setSelectedRole(role)}
                       className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer ${
                         selectedRole === role
-                          ? 'bg-[#1A142E] text-[#97D700] border-[#97D700] shadow-md shadow-[#97D700]/15'
+                          ? 'bg-[#1A142E] text-[#97D700] border-[#97D700] shadow-md shadow-[#97D700]/15 scale-[1.01]'
                           : 'bg-[#0B0813] text-[#E5E0F5] border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50'
                       }`}
                     >
@@ -146,9 +146,9 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {[
-                    'Любая / Классическая (iGaming, Gambling, Betting, Nutra)',
+                    'iGaming, Gambling & Betting',
                     'Тяжелая серая со сложной модерацией и банами',
-                    'Специфические ГЕО (США, LatAm, Азия) и редкий стек',
+                    'Mobile Apps / Webview, PWA & редкие ГЕО',
                   ].map((vert) => (
                     <button
                       key={vert}
@@ -156,7 +156,7 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                       onClick={() => setVerticalType(vert)}
                       className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer ${
                         verticalType === vert
-                          ? 'bg-[#1A142E] text-[#F7CED7] border-[#F7CED7] shadow-md shadow-[#F7CED7]/15'
+                          ? 'bg-[#1A142E] text-[#F7CED7] border-[#F7CED7] shadow-md shadow-[#F7CED7]/15 scale-[1.01]'
                           : 'bg-[#0B0813] text-[#E5E0F5] border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50'
                       }`}
                     >
@@ -174,7 +174,7 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {[
-                    'Горит: показать первые проверенные резюме за 48 часов',
+                    'Срочно: первые кандидаты за 3–5 дней',
                     'Плановый найм: закрыть в течение 1–2 недель',
                   ].map((urg) => (
                     <button
@@ -183,13 +183,26 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                       onClick={() => setUrgency(urg)}
                       className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer ${
                         urgency === urg
-                          ? 'bg-[#1A142E] text-[#97D700] border-[#97D700] shadow-md shadow-[#97D700]/15'
+                          ? 'bg-[#1A142E] text-[#97D700] border-[#97D700] shadow-md shadow-[#97D700]/15 scale-[1.01]'
                           : 'bg-[#0B0813] text-[#E5E0F5] border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50'
                       }`}
                     >
                       {urg}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              {/* Interactive Live Brew Recipe Status */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-[#1A142E] via-[#141022] to-[#1A142E] border-2 border-[#97D700]/40 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-3 h-3 rounded-full bg-[#97D700] animate-ping shrink-0" />
+                  <span className="text-white font-bold">
+                    РЕЦЕПТ В КОТЛЕ: <span className="text-[#97D700]">{selectedRole}</span> · <span className="text-[#F7CED7]">{verticalType}</span> · <span className="text-[#8B5CF6]">{urgency}</span>
+                  </span>
+                </div>
+                <div className="px-3 py-1 rounded-full bg-[#97D700]/20 text-[#97D700] text-[11px] font-bold border border-[#97D700]/30 shrink-0">
+                  🔥 Готово к варке
                 </div>
               </div>
 

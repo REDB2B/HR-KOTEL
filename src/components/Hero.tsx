@@ -69,13 +69,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInstantModal }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Top Tagline with official logo mark */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#1A142E] border border-[#8B5CF6]/40 text-[#F7CED7] text-xs font-mono font-bold uppercase tracking-wider mb-6 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-full bg-[#1A142E] border border-[#8B5CF6]/40 text-[#F7CED7] text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider mb-6 shadow-sm max-w-full">
           <img 
             src={LOGO_IMAGE_SRC} 
             alt="Logo" 
-            className="w-4 h-4 rounded-md object-cover"
+            className="w-4 h-4 rounded-md object-cover shrink-0"
           />
-          <span>KOTEL HR · ВАРИМ ИДЕАЛЬНЫЕ КАДРЫ ДЛЯ АРБИТРАЖА</span>
+          <span className="truncate">KOTEL HR · ВАРИМ ИДЕАЛЬНЫЕ КАДРЫ ДЛЯ АРБИТРАЖА</span>
         </div>
 
         {/* 2-Column Layout */}
@@ -168,29 +168,29 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInstantModal }) => {
             </div>
 
             {/* Quick Metrics */}
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#8B5CF6]/20 max-w-xl">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4 border-t border-[#8B5CF6]/20 max-w-xl">
               <div>
-                <span className="text-xl sm:text-2xl font-black font-mono text-[#97D700] block">
-                  48 часов
+                <span className="text-lg sm:text-2xl font-black font-mono text-[#97D700] block">
+                  3–5 дней
                 </span>
-                <span className="text-xs text-[#E5E0F5] font-medium block">Первые кандидаты</span>
-                <span className="text-[10px] text-[#A39AB8]">Только проверенные статы</span>
+                <span className="text-[11px] sm:text-xs text-[#E5E0F5] font-medium block leading-tight">Первые кандидаты</span>
+                <span className="text-[9px] sm:text-[10px] text-[#A39AB8] block mt-0.5">Скрининг статов</span>
               </div>
 
               <div>
-                <span className="text-xl sm:text-2xl font-black font-mono text-white block">
+                <span className="text-lg sm:text-2xl font-black font-mono text-white block">
                   12 000+
                 </span>
-                <span className="text-xs text-[#E5E0F5] font-medium block">База специалистов</span>
-                <span className="text-[10px] text-[#A39AB8]">Арбитраж и диджитал</span>
+                <span className="text-[11px] sm:text-xs text-[#E5E0F5] font-medium block leading-tight">База специалистов</span>
+                <span className="text-[9px] sm:text-[10px] text-[#A39AB8] block mt-0.5">Арбитраж и digital</span>
               </div>
 
               <div>
-                <span className="text-xl sm:text-2xl font-black font-mono text-[#F7CED7] block">
-                  90 дней
+                <span className="text-lg sm:text-2xl font-black font-mono text-[#F7CED7] block">
+                  31 день
                 </span>
-                <span className="text-xs text-[#E5E0F5] font-medium block">Гарантия замены</span>
-                <span className="text-[10px] text-[#A39AB8]">Бесплатно по договору</span>
+                <span className="text-[11px] sm:text-xs text-[#E5E0F5] font-medium block leading-tight">Гарантия замены</span>
+                <span className="text-[9px] sm:text-[10px] text-[#A39AB8] block mt-0.5">1 месяц по договору</span>
               </div>
             </div>
 

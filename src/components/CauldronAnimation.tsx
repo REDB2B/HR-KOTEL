@@ -16,16 +16,14 @@ export const CauldronAnimation: React.FC = () => {
 
   return (
     <div 
-      className="relative w-full max-w-[420px] mx-auto aspect-square flex items-center justify-center select-none cursor-pointer group"
-      onMouseEnter={() => setStirringFast(true)}
-      onMouseLeave={() => setStirringFast(false)}
+      className="relative w-full max-w-[380px] sm:max-w-[420px] mx-auto aspect-square flex items-center justify-center select-none cursor-pointer group transition-transform duration-300 active:scale-[0.98]"
       onClick={toggleStirring}
-      onTouchStart={toggleStirring}
       role="button"
       tabIndex={0}
-      aria-label="Интерактивный котел KOTEL HR: нажмите, чтобы ускорить варку"
+      aria-label="Интерактивный котел KOTEL HR: нажмите, чтобы переключить режим варки"
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
           toggleStirring();
         }
       }}
@@ -77,7 +75,7 @@ export const CauldronAnimation: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. BADGE: + Сквад под ключ */}
+      {/* 3. BADGE: + Команда под ключ */}
       <div className="absolute bottom-8 left-2 z-20 animate-float-slow pointer-events-none" style={{ animationDelay: '2.2s' }}>
         <div 
           className={`px-3 py-1 rounded-full font-mono text-[11px] font-bold transition-all duration-300 shadow-md backdrop-blur-md ${
@@ -86,7 +84,7 @@ export const CauldronAnimation: React.FC = () => {
               : 'bg-[#1A142E] text-white border border-[#F7CED7]/40'
           }`}
         >
-          <span>+ Сквад под ключ</span>
+          <span>+ Команда под ключ</span>
         </div>
       </div>
 
@@ -321,25 +319,27 @@ export const CauldronAnimation: React.FC = () => {
         <circle cx="210" cy="130" r={stirringFast ? '3.5' : '2.5'} fill="#8B5CF6" className="animate-bubble-1" />
       </svg>
 
-      {/* Interactive prompt label (Touch & Click enabled) */}
-      <div className="absolute -bottom-2 text-center w-full">
-        <span className={`text-[11px] font-mono px-3 py-1 rounded-full border transition-all duration-300 inline-flex items-center gap-1.5 ${
+      {/* Interactive prompt label (One-click toggle: Minimal <-> Turbo) */}
+      <div className="absolute -bottom-3 text-center w-full z-30">
+        <div className={`text-[11px] font-mono px-4 py-1.5 rounded-full border transition-all duration-300 inline-flex items-center gap-2 shadow-lg backdrop-blur-md ${
           stirringFast 
-            ? 'bg-[#97D700] text-[#0B0813] font-black border-[#97D700] shadow-lg shadow-[#97D700]/40 scale-105' 
-            : 'bg-[#141022]/90 text-[#F7CED7] border-[#8B5CF6]/30'
+            ? 'bg-[#97D700] text-[#0B0813] font-black border-[#97D700] shadow-[#97D700]/30 scale-105' 
+            : 'bg-[#141022]/95 text-[#E5E0F5] border-[#8B5CF6]/40 hover:border-[#97D700]/60'
         }`}>
           {stirringFast ? (
             <>
+              <span className="w-2 h-2 rounded-full bg-[#0B0813] animate-ping" />
               <Flame className="w-3.5 h-3.5 text-[#0B0813] animate-pulse" />
-              <span>Котел кипит на максимуме! Нажмите, чтобы замедлить</span>
+              <span>Режим: ТУРБО (ROI 120%+) · Кликните для минимального</span>
             </>
           ) : (
             <>
+              <span className="w-2 h-2 rounded-full bg-[#97D700]" />
               <Sparkles className="w-3.5 h-3.5 text-[#97D700]" />
-              <span>Нажмите или наведите, чтобы ускорить варку</span>
+              <span>Режим: Минимальный · Кликните для Турбо-ускорения</span>
             </>
           )}
-        </span>
+        </div>
       </div>
 
     </div>

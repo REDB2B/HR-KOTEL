@@ -46,7 +46,7 @@ export const Cases: React.FC<CasesProps> = ({ onOpenInstantModal }) => {
               </div>
 
               <div className="text-xs font-mono font-bold text-[#97D700] uppercase tracking-wider mb-1">
-                СБОРКА СКВАДА ПОД КЛЮЧ
+                СБОРКА КОМАНДЫ ПОД КЛЮЧ
               </div>
               
               <h3 className="text-xl font-extrabold text-white mb-2 leading-snug">
@@ -75,10 +75,10 @@ export const Cases: React.FC<CasesProps> = ({ onOpenInstantModal }) => {
             </div>
 
             <button
-              onClick={() => onOpenInstantModal('Сборка медиабаинг-сквада под ключ')}
+              onClick={() => onOpenInstantModal('Сборка медиабаинг-команды под ключ')}
               className="w-full py-3 px-4 rounded-xl bg-[#97D700] hover:bg-[#85be00] text-[#0B0813] font-extrabold text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer group-hover:scale-[1.01]"
             >
-              <span>Собрать такой же сквад</span>
+              <span>Собрать такую же команду</span>
               <ArrowRight className="w-4 h-4 text-[#0B0813]" />
             </button>
           </div>

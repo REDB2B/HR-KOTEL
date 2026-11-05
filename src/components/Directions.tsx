@@ -26,12 +26,12 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
               Работаем с любыми вертикалями — включая самые тяжелые и нестандартные
             </h3>
             <p className="text-xs sm:text-sm text-[#E5E0F5]/85 mt-1.5 leading-relaxed">
-              У каждой команды свои связки и специфика: iGaming, Gambling, Betting, Nutra, Crypto, FinTech, E-com, подписки, серые и белые темы со сложной модерацией. У нас есть база специалистов под любые требования.
+              У каждой команды свои связки и специфика: iGaming, Gambling, Betting, FinTech, E-com, мобильные приложения, серые и сложные темы с жесткой модерацией. У нас есть база специалистов под любые требования.
             </p>
           </div>
           <button
             onClick={() => onOpenInstantModal('Любая сложная вертикаль')}
-            className="px-6 py-3 text-xs font-black text-[#0B0813] bg-[#97D700] hover:bg-[#85be00] rounded-xl transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap shrink-0 shadow-lg shadow-[#97D700]/20 cursor-pointer"
+            className="w-full md:w-auto px-6 py-3 text-xs font-black text-[#0B0813] bg-[#97D700] hover:bg-[#85be00] rounded-xl transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap shrink-0 shadow-lg shadow-[#97D700]/20 cursor-pointer text-center justify-center"
           >
             Сварить команду под мою вертикаль
           </button>
@@ -72,7 +72,7 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
               </h3>
 
               <div className="text-xs font-semibold text-[#F7CED7] mb-3">
-                Соло-байеры, тимлиды и сквады под любые источники
+                Соло-байеры, тимлиды и команды под любые источники
               </div>
 
               <p className="text-xs text-[#E5E0F5]/85 leading-relaxed mb-6 font-normal">
@@ -83,7 +83,7 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
                 <div className="text-[11px] font-mono font-bold text-[#A39AB8] uppercase tracking-wider mb-2">
                   Кого закрываем:
                 </div>
-                {['Senior FB / TikTok Buyer', 'Google Ads & Search Lead', 'ASO / In-App Specialist', 'Team Lead Media Buying Squad', 'Head of Media Buying'].map((role, rIdx) => (
+                {['Senior FB / TikTok Buyer', 'Google Ads & Search Lead', 'ASO / In-App Specialist', 'Team Lead медиабаинг-команды', 'Head of Media Buying'].map((role, rIdx) => (
                   <div key={rIdx} className="flex items-center gap-2 text-xs text-[#E5E0F5]">
                     <Check className="w-3.5 h-3.5 text-[#97D700] shrink-0" />
                     <span>{role}</span>
@@ -101,7 +101,7 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
             </button>
           </div>
 
-          {/* Card 2: Сборка готовых сквадов & Фарминг (ПОСЛЕ Media Buying) */}
+          {/* Card 2: Сборка готовых команд & Фарминг (ПОСЛЕ Media Buying) */}
           <div className="p-7 rounded-2xl bg-[#141022] border border-[#8B5CF6]/25 hover:border-[#97D700]/50 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl shadow-lg flex flex-col justify-between group">
             <div>
               <div className="flex items-start justify-between mb-5">
@@ -114,7 +114,7 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
               </div>
 
               <h3 className="text-lg font-bold text-white mb-2 leading-snug group-hover:text-[#97D700] transition-colors duration-200">
-                Сборка готовых сквадов &amp; Фарминг
+                Сборка готовых команд &amp; Фарминг
               </h3>
 
               <div className="text-xs font-semibold text-[#F7CED7] mb-3">
@@ -129,7 +129,7 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
                 <div className="text-[11px] font-mono font-bold text-[#A39AB8] uppercase tracking-wider mb-2">
                   Кого закрываем:
                 </div>
-                {['Готовый байерский сквад (Тимлид + 3-6 байеров)', 'Тимлид фарминга аккаунтов', 'Технический саппорт и заливщики', 'Креативный моушн-отдел'].map((role, rIdx) => (
+                {['Готовая байерская команда (Тимлид + 3-6 байеров)', 'Тимлид фарминга аккаунтов', 'Технический саппорт и заливщики', 'Креативный моушн-отдел'].map((role, rIdx) => (
                   <div key={rIdx} className="flex items-center gap-2 text-xs text-[#E5E0F5]">
                     <Check className="w-3.5 h-3.5 text-[#97D700] shrink-0" />
                     <span>{role}</span>
@@ -139,10 +139,10 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
             </div>
 
             <button
-              onClick={() => onOpenInstantModal('Сборка готовых сквадов & Фарминг')}
+              onClick={() => onOpenInstantModal('Сборка готовых команд & Фарминг')}
               className="w-full py-3 px-4 rounded-xl bg-[#1A142E] hover:bg-[#231A3F] border border-[#8B5CF6]/40 text-xs font-bold text-[#F7CED7] hover:text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md"
             >
-              <span>Подобрать в это направление</span>
+              <span>Собрать готовую команду</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#97D700] group-hover:translate-x-1 transition-transform duration-200" />
             </button>
           </div>
@@ -168,14 +168,14 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
               </div>
 
               <p className="text-xs text-[#E5E0F5]/85 leading-relaxed mb-6 font-normal">
-                Разработчики мобильных прил под арбитраж (Webview, PWA), обход банов Apple и Google, Unity-слоты/мини-игры, интеграция платежных решений и крипто-шлюзов.
+                Разработчики мобильных прил под арбитраж (Webview, PWA), обход банов Apple и Google, Unity-слоты/мини-игры, интеграция платежных решений и PSP-шлюзов.
               </p>
 
               <div className="space-y-1.5 pt-4 border-t border-white/10 mb-6">
                 <div className="text-[11px] font-mono font-bold text-[#A39AB8] uppercase tracking-wider mb-2">
                   Кого закрываем:
                 </div>
-                {['iOS / Android Webview Dev', 'Инженер клоакинга & PWA', 'Unity Slots / Crash Dev', 'Full-Stack (Node / React / Crypto)', 'DevOps инфраструктуры'].map((role, rIdx) => (
+                {['iOS / Android Webview Dev', 'Инженер клоакинга & PWA', 'Unity Slots / Crash Dev', 'Full-Stack (Node / React / Python)', 'DevOps инфраструктуры'].map((role, rIdx) => (
                   <div key={rIdx} className="flex items-center gap-2 text-xs text-[#E5E0F5]">
                     <Check className="w-3.5 h-3.5 text-[#97D700] shrink-0" />
                     <span>{role}</span>
@@ -276,7 +276,7 @@ export const Directions: React.FC<DirectionsProps> = ({ onOpenInstantModal }) =>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Check className="w-3.5 h-3.5 text-[#97D700]" />
-                  <span>Гарантия бесплатной замены до 90 дней</span>
+                  <span>Гарантия бесплатной замены 31 день</span>
                 </div>
               </div>
             </div>

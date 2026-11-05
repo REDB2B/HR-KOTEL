@@ -199,7 +199,7 @@ export const InstantModal: React.FC<InstantModalProps> = ({
                 </label>
                 <input
                   type="text"
-                  placeholder="Например: Media Buyer, Dev, Сквад или общий вопрос"
+                  placeholder="Например: Media Buyer, Dev, Команда или общий вопрос"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl bg-[#0B0813] text-white border border-[#8B5CF6]/20 focus:border-[#97D700] focus:outline-none text-xs placeholder:text-[#A39AB8]/50"

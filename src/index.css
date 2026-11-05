@@ -121,6 +121,21 @@ button:active {
   }
 }
 
+.animate-steam-1,
+.animate-steam-2,
+.animate-steam-3,
+.animate-bubble-1,
+.animate-bubble-2,
+.animate-bubble-3,
+.animate-stir,
+.animate-potion-glow,
+.animate-float-slow,
+.animate-float-delayed {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
 .animate-steam-1 {
   animation: cauldron-steam 3.2s ease-in-out infinite;
 }
