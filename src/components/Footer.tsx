@@ -193,24 +193,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenInstantModal }) => {
 
         {/* Legal & copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#A39AB8]">
-          <div className="flex flex-wrap items-center gap-3">
-            <span>© {new Date().getFullYear()} KOTEL HR AGENCY. Все права защищены.</span>
-            <span className="text-white/20">|</span>
-            <a 
-              href="./kotel-landing-ready.zip" 
-              download="kotel-landing-ready.zip"
-              className="text-[#97D700] hover:text-[#b4f01e] underline font-bold transition-colors"
-            >
-              Скачать готовый сайт для GitHub (ZIP)
-            </a>
-            <span className="text-white/20">|</span>
-            <a 
-              href="./kotel-source.zip" 
-              download="kotel-source.zip"
-              className="text-[#E5E0F5] hover:text-white underline transition-colors"
-            >
-              Исходный код (source)
-            </a>
+          <div>
+            © {new Date().getFullYear()} KOTEL HR AGENCY. Все права защищены.
           </div>
           <div className="flex items-center gap-2 text-[#F7CED7]">
             <Sparkles className="w-3.5 h-3.5 text-[#97D700]" />
