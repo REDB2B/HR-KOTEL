@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -27,34 +22,34 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0B0813] text-[#E5E0F5] selection:bg-[#97D700] selection:text-[#0B0813]">
-      {/* Top Navigation */}
+      {/* Верхняя навигация */}
       <Navbar onOpenInstantModal={() => handleOpenInstantModal()} />
 
-      {/* Main Content */}
+      {/* Основной контент */}
       <main>
-        {/* Hero Section with Cauldron & Witch Vector Animation */}
+        {/* Герой-секция с котлом */}
         <Hero onOpenInstantModal={(direction) => handleOpenInstantModal(direction)} />
 
-        {/* Directions & Any Verticals (Including Heavy Ones) */}
+        {/* Направления и вертикали */}
         <Directions onOpenInstantModal={(direction) => handleOpenInstantModal(direction)} />
 
-        {/* Interactive Candidate Cooker ("Сварить команду в Котел") */}
-        <CandidateCooker onSuccessSubmit={(tg, email) => {}} />
+        {/* Конфигуратор «Сварить команду» */}
+        <CandidateCooker onSuccessSubmit={(_tg, _email) => {}} />
 
-        {/* Prominent High-Impact Cases */}
+        {/* Кейсы */}
         <Cases onOpenInstantModal={(caseTitle) => handleOpenInstantModal(undefined, caseTitle)} />
 
-        {/* 4-Step Transparent Workflow */}
+        {/* 4-шаговый процесс работы */}
         <Workflow onOpenInstantModal={() => handleOpenInstantModal()} />
 
-        {/* FAQ Accordion */}
+        {/* FAQ */}
         <TrustAndFaq onOpenInstantModal={() => handleOpenInstantModal()} />
       </main>
 
-      {/* Footer with Instant Fast Form */}
+      {/* Футер с быстрой формой */}
       <Footer onOpenInstantModal={(dir) => handleOpenInstantModal(dir)} />
 
-      {/* Global Fast 2-Field Instant Modal (Telegram + Email) */}
+      {/* Глобальная быстрая модалка (Telegram + Email) */}
       <InstantModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

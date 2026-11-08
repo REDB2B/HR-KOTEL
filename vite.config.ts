@@ -1,24 +1,31 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import { viteSingleFile } from 'vite-plugin-singlefile';
 import path from 'path';
-import {defineConfig} from 'vite';
+import { defineConfig } from 'vite';
 
-export default defineConfig(() => {
-  return {
-    base: './',
-    plugins: [react(), tailwindcss(), viteSingleFile()],
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
+// ✅ base: '/' для кастомного домена (CNAME)
+// ✅ Если используешь GitHub Pages без домена (username.github.io/repo),
+//    замени base на '/имя-репозитория/'
+export default defineConfig({
+  base: '/',
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        // Разбиваем чанки для лучшей кэшируемости
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          motion: ['motion'],
+          icons: ['lucide-react'],
+        },
       },
     },
-    server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
-      hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
-      watch: process.env.DISABLE_HMR === 'true' ? null : {},
-    },
-  };
+  },
 });

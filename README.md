@@ -1,76 +1,122 @@
-# KOTEL | HR AGENCY — Landing Page
+# KOTEL HR AGENCY — Landing Page
 
-> Премиальный высококонверсионный лендинг для рекрутингового агентства в сфере арбитража трафика, медиабаинга, гемблинга, крипто и affiliate-маркетинга.
+Лендинг рекрутингового агентства KOTEL HR для ниши iGaming, Affiliate Marketing и Media Buying.
 
-## 🚀 О проекте
-- **Канал агентства**: `@hrkotel`
-- **Стек технологий**:
-  - React 19 (TypeScript)
-  - Vite 6
-  - Tailwind CSS v4
-  - Lucide React (векторная иконографика)
-  - Чистая GPU-анимация SVG (Котел, ведьма, варка зелья)
-  - Клиентская валидация Telegram `@username` и моментальные формы захвата лидов
+## 🗂 Структура проекта
 
-## 📦 Быстрый старт
+```
+kotel-hr-landing/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml          ← Авто-деплой на GitHub Pages
+├── public/
+│   ├── .nojekyll               ← Отключает Jekyll на GitHub Pages
+│   ├── favicon.ico             ← Добавь свою иконку (необязательно)
+│   └── og-image.png            ← Превью для соцсетей (необязательно)
+├── src/
+│   ├── assets/
+│   │   └── logoBase64.ts       ← Логотип в Base64
+│   ├── components/             ← Все секции лендинга
+│   │   ├── Navbar.tsx          ← Навигация
+│   │   ├── Hero.tsx            ← Герой-секция с формой
+│   │   ├── Directions.tsx      ← Направления
+│   │   ├── CandidateCooker.tsx ← Конфигуратор «Сварить команду»
+│   │   ├── Cases.tsx           ← Кейсы
+│   │   ├── Workflow.tsx        ← Схема работы
+│   │   ├── TrustAndFaq.tsx     ← FAQ
+│   │   ├── Footer.tsx          ← Футер
+│   │   ├── InstantModal.tsx    ← Быстрая модалка
+│   │   ├── LeadModal.tsx       ← Расширенная модалка
+│   │   ├── Vacancies.tsx       ← Вакансии
+│   │   ├── VacancyModal.tsx    ← Модалка вакансии
+│   │   ├── WhyUs.tsx           ← Почему мы
+│   │   ├── Specializations.tsx ← Специализации
+│   │   ├── Calculator.tsx      ← Калькулятор
+│   │   ├── AudienceSwitch.tsx  ← Переключатель аудитории
+│   │   └── CauldronAnimation.tsx ← Анимация котла
+│   ├── data/
+│   │   └── recruitingData.ts   ← ВСЕ ТЕКСТЫ, вакансии, кейсы — редактируй здесь
+│   ├── styles/
+│   │   └── index.css           ← Глобальные стили и анимации
+│   ├── utils/
+│   │   └── telegramValidation.ts ← Валидация Telegram username
+│   ├── types.ts                ← TypeScript типы
+│   ├── App.tsx                 ← Корневой компонент
+│   └── main.tsx                ← Точка входа
+├── index.html                  ← HTML-шаблон (SEO мета-теги тут)
+├── vite.config.ts              ← Настройки сборщика
+├── tsconfig.json               ← TypeScript конфиг
+├── package.json                ← Зависимости
+└── .gitignore
+```
 
-### 1. Клонирование и установка зависимостей
+## 🚀 Быстрый старт
+
 ```bash
+# 1. Установить зависимости
 npm install
-```
 
-### 2. Запуск локального сервера разработки
-```bash
+# 2. Запустить локально
 npm run dev
-```
-Сервер будет доступен по адресу `http://localhost:3000` (или `http://localhost:5173`).
 
-### 3. Сборка для продакшена (Production Build)
-```bash
+# 3. Собрать для продакшн
 npm run build
-```
-Готовые оптимизированные статические файлы будут сохранены в папку `dist/`. Их можно загрузить на любой хостинг (Vercel, Cloudflare Pages, Netlify, GitHub Pages, Nginx и т.д.).
 
-### 4. Предпросмотр сборки
-```bash
+# 4. Превью сборки
 npm run preview
 ```
 
-## 🎨 Фирменная палитра цветов (Pantone)
-- **Pantone 375 C** (`#97D700`) — Неоновый лайм котла, магические искры и акценты
-- **Pantone 3435 C** (`#154734`) — Глубокий темно-зеленый (изумрудный)
-- **Pantone 706 C** (`#F7CED7`) — Нежно-розовый акцент
-- **Mystic Purple** (`#8B5CF6`) — Мистический фиолетовый оттенок
-- **Deep Canvas** (`#0B0813`) — Темный технологичный фон
+## 📝 Как редактировать контент
 
-## 📁 Структура проекта
-```
-├── public/
-│   └── assets/
-│       └── aistudio/
-│           └── image_4e3a065d.png  # Фирменный логотип Котла
-├── src/
-│   ├── components/
-│   │   ├── Navbar.tsx             # Навигация с логотипом и кнопкой быстрой связи
-│   │   ├── Hero.tsx               # Первый экран с УТП, быстрой формой и интерактивным котлом
-│   │   ├── CauldronAnimation.tsx  # Интерактивная векторная анимация варки зелья
-│   │   ├── Directions.tsx         # Направления подбора (6 специализированных блоков)
-│   │   ├── CandidateCooker.tsx    # Конструктор подбора идеального кандидата
-│   │   ├── Cases.tsx              # Реальные кейсы агентства (сквады, CMO, dev)
-│   │   ├── Workflow.tsx           # Процесс работы без лишней бюрократии
-│   │   ├── TrustAndFaq.tsx        # FAQ и 100% гарантия конфиденциальности
-│   │   ├── Footer.tsx             # Футер с быстрой формой и навигацией
-│   │   └── InstantModal.tsx       # Универсальное всплывающее окно захвата лидов
-│   ├── utils/
-│   │   └── telegramValidation.ts  # Строгая валидация @username
-│   ├── App.tsx                    # Корневой компонент
-│   ├── index.css                  # Tailwind CSS и ключевые кейфреймы анимации
-│   └── main.tsx                   # Точка входа React
-├── index.html                     # HTML-разметка с мета-тегами
-├── package.json                   # Зависимости и скрипты
-├── tsconfig.json                  # Конфигурация TypeScript
-└── vite.config.ts                 # Конфигурация Vite
+| Что менять | Файл |
+|---|---|
+| Вакансии | `src/data/recruitingData.ts` → `VACANCIES` |
+| Кейсы | `src/data/recruitingData.ts` → `CASE_STUDIES` |
+| Специализации | `src/data/recruitingData.ts` → `SPECIALIZATIONS` |
+| Шаги работы | `src/data/recruitingData.ts` → `WORKFLOW_STEPS` |
+| FAQ | `src/data/recruitingData.ts` → `FAQS` |
+| Цвета темы | `src/styles/index.css` → блок `:root` |
+| SEO-теги | `index.html` |
+| Логотип | `src/assets/logoBase64.ts` |
+
+## 🌐 Деплой на GitHub Pages
+
+### Шаг 1: Загрузи проект в GitHub
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/ТВО_ИМЯ/ИМЯ_РЕПО.git
+git push -u origin main
 ```
 
-## 🔒 Конфиденциальность
-Все формы работают по принципу 100% конфиденциальности: данные передаются строго напрямую и защищены от попадания третьим лицам.
+### Шаг 2: Включи GitHub Pages
+В репозитории: **Settings → Pages → Source → GitHub Actions**
+
+После этого каждый `git push` в `main` автоматически деплоит сайт.
+
+### Шаг 3: Подключение кастомного домена
+1. В репозитории: **Settings → Pages → Custom domain** — введи свой домен
+2. У регистратора домена добавь DNS-записи:
+   - **Если apex-домен** (yourdomain.com):
+     ```
+     A    @    185.199.108.153
+     A    @    185.199.109.153
+     A    @    185.199.110.153
+     A    @    185.199.111.153
+     ```
+   - **Если www** (www.yourdomain.com):
+     ```
+     CNAME  www  ТВО_ИМЯ.github.io
+     ```
+3. В файле `index.html` замени `YOUR_DOMAIN` на свой настоящий домен
+4. `vite.config.ts` уже настроен с `base: '/'` для кастомного домена ✅
+
+> **Важно:** После добавления домена GitHub автоматически создаст файл `CNAME` в корне `gh-pages` ветки. Не удаляй его.
+
+## ⚙️ Настройка `base` в vite.config.ts
+
+| Ситуация | Значение `base` |
+|---|---|
+| Кастомный домен (yourdomain.com) | `'/'` ✅ уже стоит |
+| GitHub Pages без домена (user.github.io/repo) | `'/имя-репозитория/'` |

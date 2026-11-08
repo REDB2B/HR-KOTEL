@@ -1,7 +1,6 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+// ============================================================
+// ТИПЫ ДАННЫХ — редактируй здесь при необходимости
+// ============================================================
 
 export type RoleCategory = 'media_buying' | 'development' | 'affiliate_bd' | 'management';
 
