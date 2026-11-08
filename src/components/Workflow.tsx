@@ -39,7 +39,7 @@ export const Workflow: React.FC<WorkflowProps> = ({ onOpenInstantModal }) => {
   ];
 
   return (
-    <section id="workflow" className="py-20 md:py-28 bg-[#0B0813] border-b border-[#8B5CF6]/20">
+    <section id="workflow" className="py-16 md:py-28 bg-[#0B0813] border-b border-[#8B5CF6]/20 overflow-hidden w-full max-w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

@@ -45,7 +45,7 @@ export const TrustAndFaq: React.FC<TrustAndFaqProps> = ({ onOpenInstantModal }) 
   ];
 
   return (
-    <section id="faq" className="py-20 md:py-28 bg-[#0D0A17] border-b border-[#8B5CF6]/20">
+    <section id="faq" className="py-16 md:py-28 bg-[#0D0A17] border-b border-[#8B5CF6]/20 overflow-hidden w-full max-w-full">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

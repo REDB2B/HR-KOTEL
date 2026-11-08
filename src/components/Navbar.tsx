@@ -16,148 +16,146 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenInstantModal }) => {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#8B5CF6]/20 bg-[#0B0813]/90 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
-        
-        {/* Zone 1: Official Logo provided by user + Brand Wordmark */}
-        <a 
-          href="#" 
-          className="flex items-center gap-3 group whitespace-nowrap shrink-0 text-decoration-none"
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between gap-3 sm:gap-6">
+        {/* Zone 1: Official Logo + Brand Wordmark */}
+        <a
+          href="#"
+          className="flex items-center gap-2.5 sm:gap-3 group whitespace-nowrap shrink-0 text-decoration-none"
         >
-          <img 
-            src={LOGO_IMAGE_SRC} 
-            alt="KOTEL HR Logo" 
-            className="w-10 h-10 rounded-xl object-cover shadow-md shadow-[#97D700]/25 border border-[#97D700]/40 group-hover:scale-105 transition-transform shrink-0" 
+          <img
+            src={LOGO_IMAGE_SRC}
+            alt="KOTEL HR Logo"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover shadow-md shadow-[#97D700]/25 border border-[#97D700]/40 group-hover:scale-105 transition-transform shrink-0"
           />
 
           <div className="flex flex-col">
-            <div className="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+            <div className="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2">
               <span>KOTEL</span>
-              <span className="text-xs px-2 py-0.5 rounded bg-[#97D700] text-[#0B0813] font-black tracking-wider uppercase font-mono">
+              <span className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded bg-[#97D700] text-[#0B0813] font-black tracking-wider uppercase font-mono">
                 HR
               </span>
             </div>
-            <span className="text-[11px] font-medium text-[#F7CED7] tracking-wide">
-              Рекрутинг для арбитража трафика
+            <span className="text-[10px] sm:text-[11px] font-medium text-[#F7CED7] tracking-wide hidden xs:inline-block">
+              Рекрутинг для арбитража
             </span>
           </div>
         </a>
 
-        {/* Zone 2: Navigation Links */}
+        {/* Zone 2: Navigation Links (Desktop) */}
         <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-[#E5E0F5]">
-          <a 
-            href="#directions" 
+          <a
+            href="#directions"
             className="hover:text-[#97D700] transition-colors whitespace-nowrap shrink-0"
           >
             Направления
           </a>
-          <a 
-            href="#candidate-cooker" 
+          <a
+            href="#candidate-cooker"
             className="hover:text-[#97D700] transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 text-[#F7CED7]"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#97D700]" />
             <span>Сварить команду</span>
           </a>
-          <a 
-            href="#cases" 
+          <a
+            href="#cases"
             className="hover:text-[#97D700] transition-colors whitespace-nowrap shrink-0"
           >
             Кейсы
           </a>
-          <a 
-            href="#workflow" 
+          <a
+            href="#workflow"
             className="hover:text-[#97D700] transition-colors whitespace-nowrap shrink-0"
           >
             Как работаем
           </a>
-          <a 
-            href="#faq" 
+          <a
+            href="#faq"
             className="hover:text-[#97D700] transition-colors whitespace-nowrap shrink-0"
           >
             FAQ
           </a>
         </nav>
 
-        {/* Zone 3: Fast Action Button */}
+        {/* Zone 3: Fast Action Button (Desktop) */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
           <button
             onClick={() => onOpenInstantModal(undefined, 'Заявка на подбор')}
-            className="px-5 py-2.5 text-xs font-extrabold text-[#0B0813] bg-[#97D700] hover:bg-[#85be00] rounded-xl transition-all shadow-lg shadow-[#97D700]/20 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-2"
+            className="px-5 py-2.5 text-xs font-extrabold text-[#0B0813] bg-[#97D700] hover:bg-[#85be00] rounded-xl transition-all shadow-lg shadow-[#97D700]/20 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-2 min-h-[42px]"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#0B0813]" />
             <span>Оставить заявку</span>
           </button>
         </div>
 
-        {/* Mobile menu button */}
-        <div className="flex lg:hidden items-center gap-2">
+        {/* Mobile menu controls */}
+        <div className="flex lg:hidden items-center gap-2 shrink-0">
           <button
             onClick={() => onOpenInstantModal(undefined, 'Быстрая заявка')}
-            className="px-3.5 py-1.5 text-xs font-bold text-[#0B0813] bg-[#97D700] rounded-lg whitespace-nowrap shrink-0"
+            className="px-3.5 py-2 text-xs font-bold text-[#0B0813] bg-[#97D700] rounded-xl whitespace-nowrap shrink-0 min-h-[38px] flex items-center justify-center shadow-md shadow-[#97D700]/20 active:scale-95"
           >
             Заявка
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-[#E5E0F5] hover:bg-[#1A142E] rounded-lg focus:outline-none"
-            aria-label="Toggle navigation menu"
+            className="w-10 h-10 flex items-center justify-center text-[#E5E0F5] hover:bg-[#1A142E] rounded-xl border border-[#8B5CF6]/30 active:scale-95 focus:outline-none"
+            aria-label="Открыть меню навигации"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-6 h-6 text-[#97D700]" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
-
       </div>
 
       {/* Mobile dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-b border-[#8B5CF6]/20 bg-[#0B0813] px-4 py-4 space-y-3">
-          <div className="flex flex-col gap-3 text-sm font-semibold text-[#E5E0F5]">
-            <a 
-              href="#directions" 
+        <div className="lg:hidden border-b border-[#8B5CF6]/20 bg-[#0B0813]/98 px-5 py-5 space-y-4 shadow-2xl">
+          <div className="flex flex-col gap-1 text-sm font-semibold text-[#E5E0F5]">
+            <a
+              href="#directions"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-[#97D700]"
+              className="py-2.5 px-3 rounded-lg hover:bg-[#1A142E] hover:text-[#97D700] transition-colors"
             >
               Направления и вертикали
             </a>
-            <a 
-              href="#candidate-cooker" 
+            <a
+              href="#candidate-cooker"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-[#97D700] text-[#F7CED7] flex items-center gap-2"
+              className="py-2.5 px-3 rounded-lg hover:bg-[#1A142E] hover:text-[#97D700] text-[#F7CED7] flex items-center gap-2 transition-colors"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#97D700]" />
+              <Sparkles className="w-4 h-4 text-[#97D700]" />
               <span>Конфигуратор «Сварить команду»</span>
             </a>
-            <a 
-              href="#cases" 
+            <a
+              href="#cases"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-[#97D700]"
+              className="py-2.5 px-3 rounded-lg hover:bg-[#1A142E] hover:text-[#97D700] transition-colors"
             >
               Кейсы и цифры
             </a>
-            <a 
-              href="#workflow" 
+            <a
+              href="#workflow"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-[#97D700]"
+              className="py-2.5 px-3 rounded-lg hover:bg-[#1A142E] hover:text-[#97D700] transition-colors"
             >
               Схема работы
             </a>
-            <a 
-              href="#faq" 
+            <a
+              href="#faq"
               onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-[#97D700]"
+              className="py-2.5 px-3 rounded-lg hover:bg-[#1A142E] hover:text-[#97D700] transition-colors"
             >
               Вопросы и ответы
             </a>
           </div>
 
-          <div className="pt-3 border-t border-[#8B5CF6]/20">
+          <div className="pt-2 border-t border-[#8B5CF6]/20">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenInstantModal(undefined, 'Мобильная заявка');
               }}
-              className="w-full py-3 text-xs font-bold text-[#0B0813] bg-[#97D700] rounded-xl flex items-center justify-center gap-2"
+              className="w-full py-3.5 text-xs font-bold text-[#0B0813] bg-[#97D700] hover:bg-[#85be00] rounded-xl flex items-center justify-center gap-2 min-h-[44px] shadow-lg shadow-[#97D700]/25 active:scale-98"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-4 h-4" />
               <span>Оставить заявку (Telegram + Email)</span>
             </button>
           </div>

@@ -1,122 +1,91 @@
 # KOTEL HR AGENCY — Landing Page
 
-Лендинг рекрутингового агентства KOTEL HR для ниши iGaming, Affiliate Marketing и Media Buying.
+Лендинг специализированного рекрутингового агентства **KOTEL HR** для ниш iGaming, Affiliate Marketing и Media Buying.
 
-## 🗂 Структура проекта
+🌐 **Рабочий домен:** [https://hrkotel.sbs/](https://hrkotel.sbs/)
+
+---
+
+## 🗂 Чистая и масштабируемая структура проекта
 
 ```
 kotel-hr-landing/
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          ← Авто-деплой на GitHub Pages
+│       └── deploy.yml          ← Авто-деплой GitHub Actions (Node 22)
 ├── public/
 │   ├── .nojekyll               ← Отключает Jekyll на GitHub Pages
-│   ├── favicon.ico             ← Добавь свою иконку (необязательно)
-│   └── og-image.png            ← Превью для соцсетей (необязательно)
+│   ├── CNAME                   ← Привязка домена hrkotel.sbs (защита от сброса)
+│   └── [изображения]           ← Иконки и иллюстрации
 ├── src/
 │   ├── assets/
-│   │   └── logoBase64.ts       ← Логотип в Base64
-│   ├── components/             ← Все секции лендинга
-│   │   ├── Navbar.tsx          ← Навигация
-│   │   ├── Hero.tsx            ← Герой-секция с формой
-│   │   ├── Directions.tsx      ← Направления
-│   │   ├── CandidateCooker.tsx ← Конфигуратор «Сварить команду»
-│   │   ├── Cases.tsx           ← Кейсы
-│   │   ├── Workflow.tsx        ← Схема работы
-│   │   ├── TrustAndFaq.tsx     ← FAQ
-│   │   ├── Footer.tsx          ← Футер
-│   │   ├── InstantModal.tsx    ← Быстрая модалка
-│   │   ├── LeadModal.tsx       ← Расширенная модалка
-│   │   ├── Vacancies.tsx       ← Вакансии
-│   │   ├── VacancyModal.tsx    ← Модалка вакансии
-│   │   ├── WhyUs.tsx           ← Почему мы
-│   │   ├── Specializations.tsx ← Специализации
-│   │   ├── Calculator.tsx      ← Калькулятор
-│   │   ├── AudienceSwitch.tsx  ← Переключатель аудитории
-│   │   └── CauldronAnimation.tsx ← Анимация котла
+│   │   └── logoBase64.ts       ← Векторный/растровый логотип в Base64
+│   ├── components/             ← Модульные секции лендинга
+│   │   ├── Navbar.tsx          ← Шапка с удобным мобильным меню
+│   │   ├── Hero.tsx            ← Главный экран с быстрой формой
+│   │   ├── Directions.tsx      ← Направления и вертикали
+│   │   ├── CandidateCooker.tsx ← Конфигуратор «Сварить команду в Котел»
+│   │   ├── Cases.tsx           ← Оцифрованные кейсы
+│   │   ├── Workflow.tsx        ← 4-шаговый прозрачный процесс
+│   │   ├── TrustAndFaq.tsx     ← Вопросы и ответы (FAQ)
+│   │   ├── Footer.tsx          ← Подвал с формой
+│   │   ├── InstantModal.tsx    ← Модальное окно (крупные тач-кнопки 44px)
+│   │   ├── CauldronAnimation.tsx ← Аппаратно-ускоренный интерактивный котел
+│   │   └── ...
 │   ├── data/
-│   │   └── recruitingData.ts   ← ВСЕ ТЕКСТЫ, вакансии, кейсы — редактируй здесь
+│   │   └── recruitingData.ts   ← Все тексты, вакансии, кейсы и FAQ
 │   ├── styles/
-│   │   └── index.css           ← Глобальные стили и анимации
+│   │   └── index.css           ← Глобальные стили, Pantone цвета, анимации
 │   ├── utils/
-│   │   └── telegramValidation.ts ← Валидация Telegram username
-│   ├── types.ts                ← TypeScript типы
-│   ├── App.tsx                 ← Корневой компонент
-│   └── main.tsx                ← Точка входа
-├── index.html                  ← HTML-шаблон (SEO мета-теги тут)
-├── vite.config.ts              ← Настройки сборщика
-├── tsconfig.json               ← TypeScript конфиг
-├── package.json                ← Зависимости
-└── .gitignore
+│   │   ├── leadSender.ts       ← Моментальная отправка лидов в Google Таблицу
+│   │   └── telegramValidation.ts ← Строгая валидация Telegram (@username)
+│   ├── types.ts                ← TypeScript интерфейсы
+│   ├── vite-env.d.ts           ← Типы Vite и CSS-модулей
+│   ├── App.tsx                 ← Корневой компонент (защита от перекосов)
+│   └── main.tsx                ← Точка входа React
+├── CNAME                       ← Домен hrkotel.sbs в корне репозитория
+├── index.html                  ← SEO-оптимизированный HTML (viewport-fit=cover)
+├── vite.config.ts              ← Конфигурация Vite для кастомного домена
+├── tsconfig.json               ← Безопасный конфиг TypeScript
+├── package.json                ← Публичные стабильные версии библиотек
+└── .gitignore                  ← Исключение системных файлов и dist
 ```
 
-## 🚀 Быстрый старт
+---
 
-```bash
-# 1. Установить зависимости
-npm install
+## 📊 Интеграция с Google Таблицей (Google Apps Script)
 
-# 2. Запустить локально
-npm run dev
+Все формы на сайте (Hero, Конфигуратор, Футер, Модалка) автоматически и моментально отправляют данные в твой Google Apps Script:
 
-# 3. Собрать для продакшн
-npm run build
-
-# 4. Превью сборки
-npm run preview
+```ts
+// src/utils/leadSender.ts
+export const GOOGLE_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycby9lZ0hWeVrRqKzSFAInoEEzgcAxhAXHyYXnlCZYZ1Tb0PnesriFR7Sif9aSRAhgJuF6g/exec';
 ```
 
-## 📝 Как редактировать контент
+### Какие данные уходят при каждой заявке:
+- `telegram` — ник пользователя через `@`
+- `email` — контактный email
+- `source` — с какой именно формы оставлена заявка
+- `role` / `vertical` / `urgency` — выбранные ингредиенты в конфигураторе
+- `comment` — детали или вопрос
+- `timestamp` / `submittedAt` — точное время по МСК
 
-| Что менять | Файл |
-|---|---|
-| Вакансии | `src/data/recruitingData.ts` → `VACANCIES` |
-| Кейсы | `src/data/recruitingData.ts` → `CASE_STUDIES` |
-| Специализации | `src/data/recruitingData.ts` → `SPECIALIZATIONS` |
-| Шаги работы | `src/data/recruitingData.ts` → `WORKFLOW_STEPS` |
-| FAQ | `src/data/recruitingData.ts` → `FAQS` |
-| Цвета темы | `src/styles/index.css` → блок `:root` |
-| SEO-теги | `index.html` |
-| Логотип | `src/assets/logoBase64.ts` |
+*В качестве резерва копия каждой заявки всегда сохраняется в `localStorage` браузера.*
 
-## 🌐 Деплой на GitHub Pages
+---
 
-### Шаг 1: Загрузи проект в GitHub
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/ТВО_ИМЯ/ИМЯ_РЕПО.git
-git push -u origin main
-```
+## 📱 Мобильная адаптация и производительность
 
-### Шаг 2: Включи GitHub Pages
-В репозитории: **Settings → Pages → Source → GitHub Actions**
+- **Без горизонтального скролла:** контейнеры жестко зафиксированы (`overflow-x: hidden`, `width: 100%`, `max-width: 100vw`). Никаких дерганий вправо-влево при свайпах.
+- **Удобные кнопки закрытия:** кнопки «Закрыть» (крестики) и кнопки меню увеличены до стандарта 44×44px с контрастной подложкой для удобного нажатия пальцем.
+- **Предотвращение автозума на iOS:** размеры шрифта инпутов на смартфонах настроены так, чтобы Safari не приближал экран при фокусе.
+- **Плавные 60-120 FPS анимации:** анимация котла и пара переведена на чистые GPU-трансформации (`translate3d`, `opacity`), убран тяжелый процессорный блюр-фильтр.
 
-После этого каждый `git push` в `main` автоматически деплоит сайт.
+---
 
-### Шаг 3: Подключение кастомного домена
-1. В репозитории: **Settings → Pages → Custom domain** — введи свой домен
-2. У регистратора домена добавь DNS-записи:
-   - **Если apex-домен** (yourdomain.com):
-     ```
-     A    @    185.199.108.153
-     A    @    185.199.109.153
-     A    @    185.199.110.153
-     A    @    185.199.111.153
-     ```
-   - **Если www** (www.yourdomain.com):
-     ```
-     CNAME  www  ТВО_ИМЯ.github.io
-     ```
-3. В файле `index.html` замени `YOUR_DOMAIN` на свой настоящий домен
-4. `vite.config.ts` уже настроен с `base: '/'` для кастомного домена ✅
+## 🚀 Публикация на GitHub Pages
 
-> **Важно:** После добавления домена GitHub автоматически создаст файл `CNAME` в корне `gh-pages` ветки. Не удаляй его.
-
-## ⚙️ Настройка `base` в vite.config.ts
-
-| Ситуация | Значение `base` |
-|---|---|
-| Кастомный домен (yourdomain.com) | `'/'` ✅ уже стоит |
-| GitHub Pages без домена (user.github.io/repo) | `'/имя-репозитория/'` |
+Просто залей файлы из этого архива в корень репозитория GitHub:
+1. GitHub Actions автоматически подхватит workflow и запустит `npm install && npm run build`.
+2. Через 1 минуту обновленная версия моментально появится на [https://hrkotel.sbs/](https://hrkotel.sbs/).

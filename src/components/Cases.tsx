@@ -13,7 +13,7 @@ interface CasesProps {
 
 export const Cases: React.FC<CasesProps> = ({ onOpenInstantModal }) => {
   return (
-    <section id="cases" className="py-20 md:py-28 bg-[#0D0A17] border-b border-[#8B5CF6]/20 relative">
+    <section id="cases" className="py-16 md:py-28 bg-[#0D0A17] border-b border-[#8B5CF6]/20 relative overflow-hidden w-full max-w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

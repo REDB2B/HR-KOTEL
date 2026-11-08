@@ -21,12 +21,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0813] text-[#E5E0F5] selection:bg-[#97D700] selection:text-[#0B0813]">
+    <div className="min-h-screen bg-[#0B0813] text-[#E5E0F5] selection:bg-[#97D700] selection:text-[#0B0813] overflow-x-hidden w-full max-w-full relative">
       {/* Верхняя навигация */}
       <Navbar onOpenInstantModal={() => handleOpenInstantModal()} />
 
       {/* Основной контент */}
-      <main>
+      <main className="w-full max-w-full overflow-x-hidden">
         {/* Герой-секция с котлом */}
         <Hero onOpenInstantModal={(direction) => handleOpenInstantModal(direction)} />
 

@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { Sparkles, CheckCircle2, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
 import { validateTelegramUsername } from '../utils/telegramValidation';
+import { sendLeadToGoogleScript } from '../utils/leadSender';
 
 interface CandidateCookerProps {
   onSuccessSubmit: (tg: string, email: string) => void;
@@ -19,8 +20,9 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
   const [email, setEmail] = useState('');
   const [tgError, setTgError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const validation = validateTelegramUsername(telegram);
@@ -32,22 +34,19 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
 
     if (!email.trim()) return;
 
-    try {
-      const existing = JSON.parse(localStorage.getItem('kotel_leads') || '[]');
-      existing.push({
-        role: selectedRole,
-        vertical: verticalType,
-        urgency,
-        telegram: validation.cleanedValue,
-        email: email.trim(),
-        source: 'candidate_cooker',
-        timestamp: new Date().toISOString(),
-      });
-      localStorage.setItem('kotel_leads', JSON.stringify(existing));
-    } catch {
-      // ignore
-    }
+    setLoading(true);
 
+    // Моментальная отправка лида в Google Apps Script + резерв в localStorage
+    await sendLeadToGoogleScript({
+      role: selectedRole,
+      vertical: verticalType,
+      urgency,
+      telegram: validation.cleanedValue,
+      email: email.trim(),
+      source: 'Конфигуратор (Сварить команду в Котел)',
+    });
+
+    setLoading(false);
     setSubmitted(true);
     onSuccessSubmit(validation.cleanedValue, email);
   };
@@ -64,56 +63,52 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
   };
 
   return (
-    <section id="candidate-cooker" className="py-20 md:py-28 bg-[#0B0813] border-b border-[#8B5CF6]/20 relative">
-      
-      {/* Mystic back aura */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#8B5CF6]/10 blur-[130px] pointer-events-none rounded-full" />
+    <section id="candidate-cooker" className="py-16 md:py-28 bg-[#0B0813] border-b border-[#8B5CF6]/20 relative overflow-hidden w-full max-w-full">
+      {/* Mystic back aura with mobile safe bounds */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[650px] h-[300px] sm:h-[350px] bg-[#8B5CF6]/10 blur-[80px] sm:blur-[130px] pointer-events-none rounded-full max-w-full" />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1A142E] border border-[#8B5CF6]/40 text-[#F7CED7] text-xs font-mono font-bold uppercase mb-3">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1A142E] border border-[#8B5CF6]/40 text-[#F7CED7] text-[10px] sm:text-xs font-mono font-bold uppercase mb-3">
             <Sparkles className="w-3.5 h-3.5 text-[#97D700]" />
             <span>ИНТЕРАКТИВНЫЙ КОНФИГУРАТОР</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight [text-wrap:balance]">
             Собрать идеального кандидата в Котел
           </h2>
-          <p className="text-sm text-[#E5E0F5]/85 mt-3 leading-relaxed max-w-xl mx-auto">
+          <p className="text-xs sm:text-sm text-[#E5E0F5]/85 mt-2 sm:mt-3 leading-relaxed max-w-xl mx-auto">
             Выберите ключевые ингредиенты под вашу задачу. Мы подключим закрытую базу и свяжемся с вами для согласования профиля.
           </p>
         </div>
 
         {/* Cooker Card */}
-        <div className="p-7 sm:p-10 rounded-3xl bg-[#141022] border border-[#8B5CF6]/30 shadow-2xl">
-          
+        <div className="p-5 sm:p-10 rounded-2xl sm:rounded-3xl bg-[#141022] border border-[#8B5CF6]/30 shadow-2xl w-full">
           {submitted ? (
-            <div className="py-10 text-center">
-              <div className="w-16 h-16 rounded-full bg-[#1A142E] border-2 border-[#97D700] text-[#97D700] mx-auto flex items-center justify-center mb-4 shadow-lg shadow-[#97D700]/25">
-                <CheckCircle2 className="w-10 h-10" />
+            <div className="py-8 sm:py-10 text-center">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#1A142E] border-2 border-[#97D700] text-[#97D700] mx-auto flex items-center justify-center mb-4 shadow-lg shadow-[#97D700]/25">
+                <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10" />
               </div>
-              <h3 className="text-2xl font-black text-white mb-2">Котел запущен в работу!</h3>
-              <p className="text-sm text-[#E5E0F5] max-w-md mx-auto mb-6 leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-black text-white mb-2">Котел запущен в работу!</h3>
+              <p className="text-xs sm:text-sm text-[#E5E0F5] max-w-md mx-auto mb-6 leading-relaxed">
                 Мы скоро свяжемся с вами в Telegram <b className="text-[#97D700]">{telegram}</b> или по почте <b className="text-[#F7CED7]">{email}</b> для уточнения стека и условий.
               </p>
               <button
                 onClick={() => setSubmitted(false)}
-                className="px-6 py-2.5 rounded-xl bg-[#1A142E] text-xs font-bold text-[#F7CED7] hover:text-white border border-[#8B5CF6]/30 transition-colors"
+                className="px-6 py-3 rounded-xl bg-[#1A142E] text-xs font-bold text-[#F7CED7] hover:text-white border border-[#8B5CF6]/30 transition-colors cursor-pointer min-h-[44px]"
               >
                 Собрать еще одного специалиста
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-8">
-              
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
               {/* Step 1: Role */}
               <div>
-                <label className="block text-xs font-mono font-bold text-[#F7CED7] uppercase tracking-wider mb-3 flex items-center gap-2">
+                <label className="block text-xs font-mono font-bold text-[#F7CED7] uppercase tracking-wider mb-2.5 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#97D700]" />
                   <span>1. ИНГРЕДИЕНТ: Какая роль вам требуется?</span>
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
                   {[
                     'Solo Media Buyer (FB/Google/ASO)',
                     'Team Lead медиабаинг-команды',
@@ -126,9 +121,9 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                       key={role}
                       type="button"
                       onClick={() => setSelectedRole(role)}
-                      className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer ${
+                      className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer min-h-[44px] flex items-center ${
                         selectedRole === role
-                          ? 'bg-[#1A142E] text-[#97D700] border-[#97D700] shadow-md shadow-[#97D700]/15 scale-[1.01]'
+                          ? 'bg-[#1A142E] text-[#97D700] border-[#97D700] shadow-md shadow-[#97D700]/15'
                           : 'bg-[#0B0813] text-[#E5E0F5] border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50'
                       }`}
                     >
@@ -140,23 +135,23 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
 
               {/* Step 2: Vertical */}
               <div>
-                <label className="block text-xs font-mono font-bold text-[#F7CED7] uppercase tracking-wider mb-3 flex items-center gap-2">
+                <label className="block text-xs font-mono font-bold text-[#F7CED7] uppercase tracking-wider mb-2.5 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#8B5CF6]" />
                   <span>2. ИНГРЕДИЕНТ: Специфика вертикали</span>
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
                   {[
                     'iGaming, Gambling & Betting',
-                    'Тяжелая серая со сложной модерацией и банами',
-                    'Mobile Apps / Webview, PWA & редкие ГЕО',
+                    'Тяжелая со сложной модерацией',
+                    'Mobile Apps / Webview & редкие ГЕО',
                   ].map((vert) => (
                     <button
                       key={vert}
                       type="button"
                       onClick={() => setVerticalType(vert)}
-                      className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer ${
+                      className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer min-h-[44px] flex items-center ${
                         verticalType === vert
-                          ? 'bg-[#1A142E] text-[#F7CED7] border-[#F7CED7] shadow-md shadow-[#F7CED7]/15 scale-[1.01]'
+                          ? 'bg-[#1A142E] text-[#F7CED7] border-[#F7CED7] shadow-md shadow-[#F7CED7]/15'
                           : 'bg-[#0B0813] text-[#E5E0F5] border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50'
                       }`}
                     >
@@ -168,11 +163,11 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
 
               {/* Step 3: Urgency */}
               <div>
-                <label className="block text-xs font-mono font-bold text-[#F7CED7] uppercase tracking-wider mb-3 flex items-center gap-2">
+                <label className="block text-xs font-mono font-bold text-[#F7CED7] uppercase tracking-wider mb-2.5 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#F7CED7]" />
                   <span>3. ИНГРЕДИЕНТ: Сроки запуска</span>
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
                   {[
                     'Срочно: первые кандидаты за 3–5 дней',
                     'Плановый найм: закрыть в течение 1–2 недель',
@@ -181,9 +176,9 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                       key={urg}
                       type="button"
                       onClick={() => setUrgency(urg)}
-                      className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer ${
+                      className={`p-3 text-xs font-bold rounded-xl transition-all text-left border cursor-pointer min-h-[44px] flex items-center ${
                         urgency === urg
-                          ? 'bg-[#1A142E] text-[#97D700] border-[#97D700] shadow-md shadow-[#97D700]/15 scale-[1.01]'
+                          ? 'bg-[#1A142E] text-[#97D700] border-[#97D700] shadow-md shadow-[#97D700]/15'
                           : 'bg-[#0B0813] text-[#E5E0F5] border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50'
                       }`}
                     >
@@ -193,22 +188,22 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                 </div>
               </div>
 
-              {/* Interactive Live Brew Recipe Status */}
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-[#1A142E] via-[#141022] to-[#1A142E] border-2 border-[#97D700]/40 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-3 h-3 rounded-full bg-[#97D700] animate-ping shrink-0" />
-                  <span className="text-white font-bold">
-                    РЕЦЕПТ В КОТЛЕ: <span className="text-[#97D700]">{selectedRole}</span> · <span className="text-[#F7CED7]">{verticalType}</span> · <span className="text-[#8B5CF6]">{urgency}</span>
-                  </span>
+              {/* Interactive Live Brew Recipe Status with responsive flex */}
+              <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-[#1A142E] border-2 border-[#97D700]/40 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#97D700] animate-ping shrink-0" />
+                  <div className="text-white font-bold leading-relaxed break-words">
+                    РЕЦЕПТ: <span className="text-[#97D700]">{selectedRole}</span> · <span className="text-[#F7CED7]">{verticalType}</span> · <span className="text-[#8B5CF6]">{urgency}</span>
+                  </div>
                 </div>
-                <div className="px-3 py-1 rounded-full bg-[#97D700]/20 text-[#97D700] text-[11px] font-bold border border-[#97D700]/30 shrink-0">
+                <div className="px-3 py-1 rounded-full bg-[#97D700]/20 text-[#97D700] text-[11px] font-bold border border-[#97D700]/30 shrink-0 self-end sm:self-auto">
                   🔥 Готово к варке
                 </div>
               </div>
 
               {/* Instant Contact Submission */}
-              <div className="p-5 sm:p-6 rounded-2xl bg-[#0B0813] border border-[#8B5CF6]/30 pt-5">
-                <div className="flex items-center justify-between mb-3 text-xs font-mono font-bold text-[#F7CED7]">
+              <div className="p-4 sm:p-6 rounded-2xl bg-[#0B0813] border border-[#8B5CF6]/30">
+                <div className="flex flex-wrap items-center justify-between mb-3 text-xs font-mono font-bold text-[#F7CED7] gap-1">
                   <span>КУДА ПРИСЛАТЬ РЕЗУЛЬТАТ:</span>
                   <span className="text-[#97D700]">ОТВЕТИМ ЗА 15–30 МИНУТ</span>
                 </div>
@@ -223,7 +218,7 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                       onChange={handleTelegramChange}
                       className={`w-full px-4 py-3 rounded-xl bg-[#141022] text-white border ${
                         tgError ? 'border-rose-400 focus:border-rose-400' : 'border-[#8B5CF6]/30 focus:border-[#97D700]'
-                      } focus:ring-1 focus:outline-none text-sm placeholder:text-[#A39AB8]/60`}
+                      } focus:ring-1 focus:outline-none text-base sm:text-sm placeholder:text-[#A39AB8]/60`}
                     />
                     {tgError && (
                       <div className="flex items-center gap-1.5 text-[11px] text-rose-400 mt-1 font-medium">
@@ -240,17 +235,18 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                       placeholder="Рабочий Email*"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[#141022] text-white border border-[#8B5CF6]/30 focus:border-[#97D700] focus:ring-1 focus:ring-[#97D700] focus:outline-none text-sm placeholder:text-[#A39AB8]/60"
+                      className="w-full px-4 py-3 rounded-xl bg-[#141022] text-white border border-[#8B5CF6]/30 focus:border-[#97D700] focus:ring-1 focus:ring-[#97D700] focus:outline-none text-base sm:text-sm placeholder:text-[#A39AB8]/60"
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-4 px-6 rounded-xl bg-[#97D700] hover:bg-[#85be00] text-[#0B0813] font-black text-sm sm:text-base transition-all shadow-lg shadow-[#97D700]/25 flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01]"
+                  disabled={loading}
+                  className="w-full py-4 px-6 rounded-xl bg-[#97D700] hover:bg-[#85be00] text-[#0B0813] font-black text-sm sm:text-base transition-all shadow-lg shadow-[#97D700]/25 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] min-h-[48px]"
                 >
                   <Sparkles className="w-5 h-5 text-[#0B0813]" />
-                  <span>Сварить команду · Скоро свяжемся</span>
+                  <span>{loading ? 'Отправляем...' : 'Сварить команду · Скоро свяжемся'}</span>
                   <ArrowRight className="w-5 h-5 text-[#0B0813]" />
                 </button>
 
@@ -264,12 +260,9 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                   </div>
                 </div>
               </div>
-
             </form>
           )}
-
         </div>
-
       </div>
     </section>
   );
