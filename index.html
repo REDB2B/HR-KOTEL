@@ -94,12 +94,13 @@
         fbq('track', 'PageView');
       })();
     </script>
+  </head>
+  <body>
+    <!-- Meta Pixel noscript fallback (в body по стандарту HTML5) -->
     <noscript>
       <img height="1" width="1" style="display:none"
            src="https://www.facebook.com/tr?id=4630588717200106&ev=PageView&noscript=1" />
     </noscript>
-  </head>
-  <body>
     <div id="root"></div>
 
     <!-- ============================================================
