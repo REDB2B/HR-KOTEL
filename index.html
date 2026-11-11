@@ -20,7 +20,6 @@
       content="Специализированное рекрутинговое агентство в нишах iGaming, Affiliate Marketing, Media Buying и Tech. Подбор ключевых специалистов и сборка команд."
     />
     <meta property="og:image" content="/og-image.png" />
-    <!-- ✅ Домен лендинга -->
     <meta property="og:url" content="https://hrkotel.sbs/" />
 
     <!-- Twitter Card -->
@@ -45,9 +44,266 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- ============================================================
+         META PIXEL & ДИНАМИЧЕСКИЙ ПИКСЕЛЬ + CONVERSIONS API (CAPI)
+         ============================================================ -->
+    <script>
+      (function() {
+        // Конфигурация по умолчанию
+        const DEFAULT_PIXEL_ID = "4630588717200106";
+        const FB_ACCESS_TOKEN = "EAGUJi76ztAoBS2JnQIGWWp1s70jVEOfbmK3l9U0LwS4KXEjtqvoWy8FoPLuBCZBC0VTPMl3Go6qjpZB3dq6I1RbXq61YoZCQaUgBMVTQJDDjfZCLzKd9rFpQUWHfV9XhyGEs2eSX4fTJv3BBz2ifN6fee4ngoM44gLKFbxP5BqDQHT65X9jW1jC8LedI8QZDZD";
+
+        // 1. Определение динамического пикселя из параметров URL (?pixel=..., ?fb_pixel=..., ?pixel_id=..., ?fbpixel=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlPixel = urlParams.get('pixel') || 
+                         urlParams.get('fb_pixel') || 
+                         urlParams.get('pixel_id') || 
+                         urlParams.get('fbpixel') || 
+                         urlParams.get('fb');
+
+        let activePixelId = DEFAULT_PIXEL_ID;
+        if (urlPixel && urlPixel.trim() !== '') {
+          activePixelId = urlPixel.trim();
+          try {
+            localStorage.setItem('kotel_dynamic_pixel', activePixelId);
+          } catch(e) {}
+        } else {
+          try {
+            const cachedPixel = localStorage.getItem('kotel_dynamic_pixel');
+            if (cachedPixel) activePixelId = cachedPixel;
+          } catch(e) {}
+        }
+
+        // Экспортируем глобально
+        window.FB_PIXEL_ID = activePixelId;
+        window.FB_ACCESS_TOKEN = FB_ACCESS_TOKEN;
+
+        // 2. Инициализация базового кода Meta Pixel
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+
+        // Инициализируем активный пиксель
+        fbq('init', activePixelId);
+        fbq('track', 'PageView');
+      })();
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+           src="https://www.facebook.com/tr?id=4630588717200106&ev=PageView&noscript=1" />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- ============================================================
+         МОМЕНТАЛЬНЫЙ ОТБИВ: GOOGLE APPS SCRIPT + ДИНАМИЧЕСКИЙ LEAD (CAPI + FBQ)
+         ============================================================ -->
+    <script>
+      (function() {
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9lZ0hWeVrRqKzSFAInoEEzgcAxhAXHyYXnlCZYZ1Tb0PnesriFR7Sif9aSRAhgJuF6g/exec";
+
+        // Хеширование SHA-256 для Meta Conversions API (CAPI)
+        async function sha256(message) {
+          if (!message) return '';
+          try {
+            const msgBuffer = new TextEncoder().encode(message.trim().toLowerCase());
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+          } catch(e) {
+            return '';
+          }
+        }
+
+        // Отправка события в Meta Conversions API (серверный отбив)
+        async function sendMetaCAPI(eventName, eventId, email, customData) {
+          try {
+            const pixelId = window.FB_PIXEL_ID || "4630588717200106";
+            const token = window.FB_ACCESS_TOKEN;
+            if (!token) return;
+
+            const hashedEmail = email ? await sha256(email) : '';
+            const capiBody = {
+              data: [
+                {
+                  event_name: eventName,
+                  event_time: Math.floor(Date.now() / 1000),
+                  action_source: "website",
+                  event_source_url: window.location.href,
+                  event_id: eventId,
+                  user_data: {
+                    client_user_agent: navigator.userAgent,
+                    ...(hashedEmail ? { em: [hashedEmail] } : {})
+                  },
+                  custom_data: customData || {}
+                }
+              ]
+            };
+
+            fetch(`https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${token}`, {
+              method: 'POST',
+              mode: 'cors',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(capiBody)
+            }).catch(function() {});
+          } catch(err) {
+            console.warn('CAPI error:', err);
+          }
+        }
+
+        // Экспортируем CAPI отправку для модулей React
+        window.sendMetaCAPI = sendMetaCAPI;
+
+        // Запоминаем, на какую именно кнопку/карточку кликнул клиент перед открытием окна
+        let lastClickedTrigger = "";
+        document.addEventListener('click', function(e) {
+          const btn = e.target.closest('button, a');
+          if (btn && btn.type !== 'submit') {
+            const card = btn.closest('div[class*="card"], section, article') || btn.parentElement;
+            const cardTitle = card ? (card.querySelector('h2, h3, h4')?.innerText || '') : '';
+            const btnText = btn.innerText.trim();
+            if (btnText && !btnText.includes('Отправить')) {
+              lastClickedTrigger = cardTitle ? `${cardTitle} (${btnText})` : btnText;
+            }
+          }
+        });
+
+        // Защита от дублей отправки
+        let lastSentPayload = "";
+        let lastSentTime = 0;
+
+        // Перехватываем отправку ЛЮБОЙ формы на сайте
+        document.addEventListener('submit', async function(e) {
+          const form = e.target;
+          if (form.tagName !== 'FORM') return;
+
+          let tg = "", email = "";
+          let optionsList = [];
+          let customTextList = [];
+
+          // 1. Определяем название блока, в котором находится форма
+          const container = form.closest('[class*="modal"], [id*="modal"], section, div[class*="block"], div[class*="box"]') || form.parentElement;
+          const blockHeading = container?.querySelector('h1, h2, h3, h4')?.innerText?.trim() || "Форма на сайте";
+          const blockSource = lastClickedTrigger ? `${blockHeading} ← [${lastClickedTrigger}]` : blockHeading;
+
+          // 2. Если это блок с Конфигуратором (Рецептом) — забираем выбранные плашки
+          if (container) {
+            container.querySelectorAll('*').forEach(el => {
+              if (el.children.length === 0 && el.innerText && el.innerText.includes('РЕЦЕПТ:')) {
+                optionsList.push(el.parentElement.innerText.replace('🔥 Готово к варке', '').trim());
+              }
+            });
+          }
+
+          // 3. Проходим по ВСЕМ полям внутри формы (input, textarea, select)
+          const fields = form.querySelectorAll('input, textarea, select');
+          fields.forEach((field, index) => {
+            if (field.type === 'submit' || field.type === 'button' || field.type === 'hidden') return;
+            if ((field.type === 'checkbox' || field.type === 'radio') && !field.checked) return;
+
+            const val = field.value.trim();
+            if (!val) return;
+
+            // Находим подпись (label) или placeholder этого поля
+            const labelEl = field.closest('label') || field.previousElementSibling;
+            const fieldLabel = (
+              labelEl?.innerText || 
+              field.placeholder || 
+              field.name || 
+              field.id || 
+              `Поле ${index + 1}`
+            ).replace('*', '').trim();
+
+            const checkStr = (fieldLabel + " " + field.type + " " + (field.name || "")).toLowerCase();
+
+            // Раскладываем по смыслу:
+            if (field.type === 'email' || checkStr.includes('email') || checkStr.includes('почт') || checkStr.includes('@company')) {
+              email = val;
+            } else if (checkStr.includes('telegram') || checkStr.includes('@username') || checkStr.includes('телеграм') || checkStr.includes('tg')) {
+              tg = val;
+            } else if (field.tagName === 'SELECT') {
+              optionsList.push(`${fieldLabel}: ${val}`);
+            } else {
+              customTextList.push(`${fieldLabel}: ${val}`);
+            }
+          });
+
+          // Проверка на заполненность контакта
+          if (!tg && !email) return;
+
+          const now = Date.now();
+          const currentSignature = tg + "|" + email + "|" + blockSource;
+          if (currentSignature === lastSentPayload && (now - lastSentTime) < 3000) {
+            return; // Защита от двойного клика
+          }
+          lastSentPayload = currentSignature;
+          lastSentTime = now;
+
+          const eventId = "lead_" + now + "_" + Math.floor(Math.random() * 100000);
+
+          const payload = {
+            block_source: blockSource,
+            tg: tg,
+            email: email,
+            selected_options: [...new Set(optionsList)].join(" | "),
+            custom_text: customTextList.join("\n"),
+            utm: window.location.search ? decodeURIComponent(window.location.search.substring(1)) : "Прямой заход",
+            url: window.location.href,
+            pixel_id: window.FB_PIXEL_ID || "4630588717200106",
+            event_id: eventId,
+            timestamp: new Date().toISOString()
+          };
+
+          // Резервная копия в localStorage
+          try {
+            const leads = JSON.parse(localStorage.getItem('kotel_leads') || '[]');
+            leads.push(payload);
+            localStorage.setItem('kotel_leads', JSON.stringify(leads));
+          } catch(e) {}
+
+          // 1. Отправка в Google Apps Script (моментально, no-cors)
+          fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }).catch(function() {});
+
+          // Резервный маяк sendBeacon
+          if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+            try {
+              const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=utf-8' });
+              navigator.sendBeacon(GOOGLE_SCRIPT_URL, blob);
+            } catch(e) {}
+          }
+
+          // 2. Отбив в Meta Pixel (Client-Side)
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead', {
+              content_name: blockSource,
+              currency: 'USD',
+              value: 0
+            }, { eventID: eventId });
+          }
+
+          // 3. Отбив в Meta Conversions API (CAPI - Server-Side через Graph API)
+          sendMetaCAPI('Lead', eventId, email, {
+            content_name: blockSource,
+            telegram: tg,
+            selected_options: payload.selected_options
+          });
+
+        }, true);
+      })();
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
