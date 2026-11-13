@@ -70,16 +70,26 @@ export const InstantModal: React.FC<InstantModalProps> = ({
 
     if (!email.trim()) return;
 
+    // Определяем точное название источника заявки
+    let modalSource = 'Модалка (Быстрая заявка)';
+    if (isQuestionMode) {
+      modalSource = '❓ Модалка: Задать вопрос (FAQ)';
+    } else if (presetDirection) {
+      modalSource = `🎯 Модалка: ${presetDirection}`;
+    } else if (presetTitle) {
+      modalSource = `📊 Модалка: ${presetTitle}`;
+    }
+
     setLoading(true);
 
     // Моментальная отправка лида в Google Apps Script + резерв в localStorage
     await sendLeadToGoogleScript({
       telegram: validation.cleanedValue,
       email: email.trim(),
-      role: role.trim() || 'Запрос',
-      comment: comment.trim(),
+      role: role.trim() || presetDirection || 'Запрос на подбор',
+      comment: comment.trim() || presetTitle || '',
       mode: isQuestionMode ? 'question' : 'hiring_request',
-      source: isQuestionMode ? 'Модалка (Консультация)' : 'Модалка (Быстрая заявка)',
+      source: modalSource,
     });
 
     setLoading(false);
@@ -169,13 +179,16 @@ export const InstantModal: React.FC<InstantModalProps> = ({
             </p>
 
             {/* Quick Form */}
-            <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4" data-block-name={isQuestionMode ? "Модалка: Задать вопрос (FAQ)" : presetDirection ? `Модалка: ${presetDirection}` : "Модальное окно заявки"}>
               <div>
                 <label className="block text-xs font-mono font-bold text-[#F7CED7] uppercase mb-1.5">
                   Telegram для связи (@username)*
                 </label>
                 <input
                   type="text"
+                  name="telegram"
+                  autoComplete="off"
+                  inputMode="text"
                   required
                   placeholder="@username"
                   value={telegram}
@@ -198,6 +211,9 @@ export const InstantModal: React.FC<InstantModalProps> = ({
                 </label>
                 <input
                   type="email"
+                  name="email"
+                  autoComplete="email"
+                  inputMode="email"
                   required
                   placeholder="partner@company.com"
                   value={email}
@@ -212,6 +228,7 @@ export const InstantModal: React.FC<InstantModalProps> = ({
                 </label>
                 <input
                   type="text"
+                  name="direction"
                   placeholder="Например: Media Buyer, Dev, Команда или вопрос"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}

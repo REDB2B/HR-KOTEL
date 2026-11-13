@@ -45,9 +45,9 @@ let lastSentTime = 0;
  */
 export async function sendLeadToGoogleScript(data: LeadData): Promise<boolean> {
   const now = Date.now();
-  const signature = `${data.telegram}|${data.email}|${data.source || ''}`;
+  const signature = `${data.telegram}|${data.email}|${data.source || ''}|${data.role || ''}`;
 
-  // Защита от дублирования отправки, если форму уже перехватил глобальный listener
+  // Защита от дублирования отправки на 3 секунды
   if (signature === lastSentSignature && now - lastSentTime < 3000) {
     return true;
   }
@@ -69,8 +69,18 @@ export async function sendLeadToGoogleScript(data: LeadData): Promise<boolean> {
 
   const payload = {
     block_source: data.source || 'Форма на сайте KOTEL HR',
+    source: data.source || 'Форма на сайте KOTEL HR',
     tg: data.telegram,
+    telegram: data.telegram,
     email: data.email,
+    role: data.role || '',
+    vertical: data.vertical || '',
+    urgency: data.urgency || '',
+    recipe: data.role && data.vertical ? `${data.role} · ${data.vertical} · ${data.urgency || ''}` : '',
+    comment: data.comment || '',
+    details: data.comment || '',
+    title: data.title || '',
+    mode: data.mode || '',
     selected_options: optionsList.join(' | '),
     custom_text: customTextList.join('\n'),
     utm:
@@ -78,13 +88,15 @@ export async function sendLeadToGoogleScript(data: LeadData): Promise<boolean> {
         ? decodeURIComponent(window.location.search.substring(1))
         : 'Прямой заход',
     url: typeof window !== 'undefined' ? window.location.href : '',
+    pageUrl: typeof window !== 'undefined' ? window.location.href : '',
     pixel_id: pixelId,
     event_id: eventId,
     timestamp: data.timestamp || new Date().toISOString(),
     submittedAt: new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' }),
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
   };
 
-  // 1. Всегда сохраняем в localStorage как резервную копию
+  // 1. Сохраняем в localStorage как резервную копию
   try {
     const existing = JSON.parse(localStorage.getItem('kotel_leads') || '[]');
     existing.push(payload);
@@ -106,14 +118,6 @@ export async function sendLeadToGoogleScript(data: LeadData): Promise<boolean> {
       },
       body: jsonBody,
     }).catch(() => {});
-
-    // Резервный beacon для мобильных
-    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-      try {
-        const blob = new Blob([jsonBody], { type: 'text/plain;charset=utf-8' });
-        navigator.sendBeacon(GOOGLE_SCRIPT_URL, blob);
-      } catch {}
-    }
 
     // 3. Отбив в Meta Pixel (Client-Side)
     if (typeof window !== 'undefined' && typeof window.fbq === 'function') {

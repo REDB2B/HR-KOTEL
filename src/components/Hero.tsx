@@ -40,7 +40,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInstantModal }) => {
     await sendLeadToGoogleScript({
       telegram: validation.cleanedValue,
       email: email.trim(),
-      source: 'Главный экран (Hero Fast Form)',
+      source: 'Главный экран (Hero) — Быстрая заявка',
     });
 
     setLoading(false);
@@ -103,7 +103,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInstantModal }) => {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleHeroSubmit} className="space-y-3">
+                <form onSubmit={handleHeroSubmit} className="space-y-3" data-block-name="Главный экран (Hero) — Быстрая заявка">
                   <div className="flex flex-wrap items-center justify-between text-xs font-mono font-bold text-[#F7CED7] gap-1 mb-1">
                     <span>Быстрый запрос на подбор:</span>
                     <span className="text-[#97D700]">ОТВЕТИМ ЗА 15–30 МИНУТ</span>
@@ -114,6 +114,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInstantModal }) => {
                       {/* text-base prevents iOS Safari from zooming and causing viewport wobble */}
                       <input
                         type="text"
+                        name="telegram"
+                        autoComplete="off"
+                        inputMode="text"
                         required
                         placeholder="Telegram (@username)*"
                         value={telegram}
@@ -133,6 +136,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInstantModal }) => {
                     <div>
                       <input
                         type="email"
+                        name="email"
+                        autoComplete="email"
+                        inputMode="email"
                         required
                         placeholder="Рабочий Email*"
                         value={email}

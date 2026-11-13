@@ -180,19 +180,23 @@
         let lastSentPayload = "";
         let lastSentTime = 0;
 
-        // Перехватываем отправку ЛЮБОЙ формы на сайте
+        // Перехватываем отправку форм как надежный fallback (только если форма не обработана React)
         document.addEventListener('submit', async function(e) {
           const form = e.target;
-          if (form.tagName !== 'FORM') return;
+          if (!form || form.tagName !== 'FORM') return;
+
+          // Если форма уже обработана компонентом React через preventDefault, пропускаем дублирование
+          if (e.defaultPrevented) return;
 
           let tg = "", email = "";
           let optionsList = [];
           let customTextList = [];
 
-          // 1. Определяем название блока, в котором находится форма
+          // 1. Точное определение блока: сначала из data-block-name, затем fallback
+          const formBlockName = form.getAttribute('data-block-name') || form.dataset.blockName;
           const container = form.closest('[class*="modal"], [id*="modal"], section, div[class*="block"], div[class*="box"]') || form.parentElement;
-          const blockHeading = container?.querySelector('h1, h2, h3, h4')?.innerText?.trim() || "Форма на сайте";
-          const blockSource = lastClickedTrigger ? `${blockHeading} ← [${lastClickedTrigger}]` : blockHeading;
+          const blockHeading = formBlockName || container?.querySelector('h1, h2, h3, h4')?.innerText?.trim() || "Форма на сайте";
+          const blockSource = formBlockName ? formBlockName : (lastClickedTrigger ? `${blockHeading} ← [${lastClickedTrigger}]` : blockHeading);
 
           // 2. Если это блок с Конфигуратором (Рецептом) — забираем выбранные плашки
           if (container) {
@@ -203,7 +207,8 @@
             });
           }
 
-          // 3. Проходим по ВСЕМ полям внутри формы (input, textarea, select)
+          // 3. Проходим по полям формы с разделением Email и Telegram
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           const fields = form.querySelectorAll('input, textarea, select');
           fields.forEach((field, index) => {
             if (field.type === 'submit' || field.type === 'button' || field.type === 'hidden') return;
@@ -212,7 +217,6 @@
             const val = field.value.trim();
             if (!val) return;
 
-            // Находим подпись (label) или placeholder этого поля
             const labelEl = field.closest('label') || field.previousElementSibling;
             const fieldLabel = (
               labelEl?.innerText || 
@@ -222,13 +226,21 @@
               `Поле ${index + 1}`
             ).replace('*', '').trim();
 
-            const checkStr = (fieldLabel + " " + field.type + " " + (field.name || "")).toLowerCase();
+            const fieldName = (field.name || '').toLowerCase();
+            const fieldType = (field.type || '').toLowerCase();
+            const checkStr = (fieldLabel + " " + fieldType + " " + fieldName).toLowerCase();
+
+            // Если значение само по себе является email
+            if (emailRegex.test(val)) {
+              if (!email) email = val;
+              return;
+            }
 
             // Раскладываем по смыслу:
-            if (field.type === 'email' || checkStr.includes('email') || checkStr.includes('почт') || checkStr.includes('@company')) {
-              email = val;
-            } else if (checkStr.includes('telegram') || checkStr.includes('@username') || checkStr.includes('телеграм') || checkStr.includes('tg')) {
-              tg = val;
+            if (fieldType === 'email' || checkStr.includes('email') || checkStr.includes('почт') || checkStr.includes('@company')) {
+              if (!email) email = val;
+            } else if (fieldName === 'telegram' || checkStr.includes('telegram') || checkStr.includes('@username') || checkStr.includes('телеграм') || checkStr.includes('tg')) {
+              if (!tg) tg = val;
             } else if (field.tagName === 'SELECT') {
               optionsList.push(`${fieldLabel}: ${val}`);
             } else {
@@ -242,7 +254,7 @@
           const now = Date.now();
           const currentSignature = tg + "|" + email + "|" + blockSource;
           if (currentSignature === lastSentPayload && (now - lastSentTime) < 3000) {
-            return; // Защита от двойного клика
+            return;
           }
           lastSentPayload = currentSignature;
           lastSentTime = now;
@@ -251,12 +263,15 @@
 
           const payload = {
             block_source: blockSource,
+            source: blockSource,
             tg: tg,
+            telegram: tg,
             email: email,
             selected_options: [...new Set(optionsList)].join(" | "),
             custom_text: customTextList.join("\n"),
             utm: window.location.search ? decodeURIComponent(window.location.search.substring(1)) : "Прямой заход",
             url: window.location.href,
+            pageUrl: window.location.href,
             pixel_id: window.FB_PIXEL_ID || "4630588717200106",
             event_id: eventId,
             timestamp: new Date().toISOString()
@@ -269,7 +284,7 @@
             localStorage.setItem('kotel_leads', JSON.stringify(leads));
           } catch(e) {}
 
-          // 1. Отправка в Google Apps Script (моментально, no-cors)
+          // Отправка в Google Apps Script
           fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -277,15 +292,7 @@
             body: JSON.stringify(payload)
           }).catch(function() {});
 
-          // Резервный маяк sendBeacon
-          if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-            try {
-              const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=utf-8' });
-              navigator.sendBeacon(GOOGLE_SCRIPT_URL, blob);
-            } catch(e) {}
-          }
-
-          // 2. Отбив в Meta Pixel (Client-Side)
+          // Отбив в Meta Pixel (Client-Side)
           if (typeof fbq === 'function') {
             fbq('track', 'Lead', {
               content_name: blockSource,
@@ -294,14 +301,14 @@
             }, { eventID: eventId });
           }
 
-          // 3. Отбив в Meta Conversions API (CAPI - Server-Side через Graph API)
+          // Отбив в Meta Conversions API (CAPI)
           sendMetaCAPI('Lead', eventId, email, {
             content_name: blockSource,
             telegram: tg,
             selected_options: payload.selected_options
           });
 
-        }, true);
+        }, false);
       })();
     </script>
 

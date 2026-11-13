@@ -43,7 +43,7 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
       urgency,
       telegram: validation.cleanedValue,
       email: email.trim(),
-      source: 'Конфигуратор (Сварить команду в Котел)',
+      source: 'Интерактивный Конфигуратор (Котел)',
     });
 
     setLoading(false);
@@ -101,7 +101,7 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8" data-block-name="Интерактивный Конфигуратор (Котел)">
               {/* Step 1: Role */}
               <div>
                 <label className="block text-xs font-mono font-bold text-[#F7CED7] uppercase tracking-wider mb-2.5 flex items-center gap-2">
@@ -212,6 +212,9 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                   <div>
                     <input
                       type="text"
+                      name="telegram"
+                      autoComplete="off"
+                      inputMode="text"
                       required
                       placeholder="Ваш Telegram (@username)*"
                       value={telegram}
@@ -231,6 +234,9 @@ export const CandidateCooker: React.FC<CandidateCookerProps> = ({ onSuccessSubmi
                   <div>
                     <input
                       type="email"
+                      name="email"
+                      autoComplete="email"
+                      inputMode="email"
                       required
                       placeholder="Рабочий Email*"
                       value={email}

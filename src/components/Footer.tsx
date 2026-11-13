@@ -38,7 +38,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenInstantModal }) => {
     await sendLeadToGoogleScript({
       telegram: validation.cleanedValue,
       email: email.trim(),
-      source: 'Форма в подвале (Footer)',
+      source: 'Подвал (Footer) — Быстрая заявка',
     });
 
     setLoading(false);
@@ -138,10 +138,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenInstantModal }) => {
                 <span className="text-[11px] text-[#A39AB8]">Мы скоро свяжемся с вами в Telegram или по почте</span>
               </div>
             ) : (
-              <form onSubmit={handleFooterSubmit} className="space-y-2.5">
+              <form onSubmit={handleFooterSubmit} className="space-y-2.5" data-block-name="Подвал (Footer) — Быстрая заявка">
                 <div>
                   <input
                     type="text"
+                    name="telegram"
+                    autoComplete="off"
+                    inputMode="text"
                     required
                     placeholder="Ваш Telegram (@username)*"
                     value={telegram}
@@ -160,6 +163,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenInstantModal }) => {
 
                 <input
                   type="email"
+                  name="email"
+                  autoComplete="email"
+                  inputMode="email"
                   required
                   placeholder="Рабочий Email*"
                   value={email}
